@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>本マスタメンテ</title>
+<style >
+.background{
+border-style: solid;
+  margin: 20px;
+  padding: 20px;
+  width:20%;
+  height:auto;
+}
+.closed{
+	text-decoration-line: underline;
+	text-decoration-style: solid;
+}
+.btn-group{
+	right:50px;
+}
+input[name=bookId]{
+	width: 100px;
+}
+input[name=bookTitle]{
+	width: 250px;
+}
+input[name=authorName]{
+	width: 250px;
+}
+input[name=publisher]{
+	width: 250px;
+}
+input[name=publicationYear]{
+	width: 80px;
+}
+input[name=publicationMonth]{
+	width: 30px;
+}
+input[name=publicationDate]{
+	width: 30px;
+}
+</style>
+</head>
+<body>
+<form class="background" method="post" th:action="@{/BookMaster}" th:object="${bookMaster}" >	
+
+<div  align="right"><a href="javascript:close_window();" >閉じる</a></div>
+<div id="div" >
+		<H4>本マスタメンテ</H4><br> 
+		<label >本ID:</label><br>
+		<input type="text" id="bookId"   name="bookId" th:field="*{bookId}"  >
+		
+		<input type="button" id="btn" name="btn-search"  value="検索" onclick="myFunction()">&nbsp;&nbsp;<br>
+		
+		<label >本タイトル:</label><br>
+		<input type="text" id="bookTitle" name="bookTitle" th:field="*{bookTitle}"  ><br>
+		
+		<label >著者名：</label><br>
+		<input type="text" id="authorName" name="authorName" th:field="*{authorName}" ><br>
+			
+		<label >出版社：</label><br>
+		<input type="text" id="publisher" name="publisher" th:field="*{publisher}" ><br>	
+		
+		<label   >出版年月日：</label><br>
+		<input type="text" id="publishcationYear" name="publicationYear" th:field="*{publicationYear}">&nbsp;<label>年</label>	
+		<input type="text" id="publishcationMonth" name="publicationMonth" th:field="*{publicationMonth}" >&nbsp;<label>月</label>	
+		<input type="text" id="publishcationDate" name="publicationDay" th:field="*{publicationDate}" >&nbsp;<label>日</label>	<br><br>
+		
+	<div class="btn-group" align="center" >
+		<input type="submit"  value="追加 " onclick="myFunction2()">&nbsp;&nbsp;
+		<form method="post" th:action="@{/BookMaster}" th:object="${bookMaster}">
+		<button name="btn-update"  value="1" onclick="myFunction3()">update</button>
+		</form>
+		
+		<button name="btn-delete" value="2" onclick="myFunction4()">delete</button>
+		<input type="reset" value="クリア">
+	</div>
+	</div>
+	<script >
+		
+		function myFunction() {	
+			
+			var id = document.getElementById("bookId").value;	
+			if(id == 0){
+				alert("MSG0001");
+			}
+				if (/[^a-zA-Z0-9\-\/]/.test(id)) {
+					alert("MSG0002");  	      		
+			}	
+						
+		}
+		function myFunction2(){
+			var id = document.getElementById("bookId").value;	
+			var title = document.getElementById("bookTitle").value;
+			var authorname = document.getElementById("authorName").value;
+			var publisher = document.getElementById("publisher").value;
+			var publicationyear = document.getElementById("publishcationYear").value;
+			var publicationmonth = document.getElementById("publishcationMonth").value;
+			var publicationdate = document.getElementById("publishcationDate").value;
+			if(id == 0){
+				alert("id-MSG0001");
+				if(title == 0){
+					alert("title-MSG0006");	
+				}
+				if(authorname == 0){
+					alert("MSG0007");
+				}
+				if(publisher == 0){
+					alert("MSG0008");
+				}
+				if(publicationyear == 0){
+					alert("year-MSG0009");
+				}
+				if(publicationmonth == 0){
+					alert("month-MSG0009");
+				}
+				if(publicationdate == 0){
+					alert("date-MSG0009");
+				}
+				
+			}else{
+				if (/[^a-zA-Z0-9\-\/]/.test(id)) {
+					alert("MSG0002");  	      		
+				}
+				if(title == 0){
+					alert("title-MSG0006");	
+				}
+				if(authorname == 0){
+					alert("MSG0007");
+				}
+				if(publisher == 0){
+					alert("MSG0008");
+				}
+				if(publicationyear == 0){
+					alert("year-MSG0009");
+				}
+				if(publicationmonth == 0){
+					alert("month-MSG0009");
+				}
+				if(publicationdate == 0){
+					alert("date-MSG0009");
+				}
+				
+			}if (/[^a-zA-Z0-9\-\/]/.test(publicationyear)) {
+				alert("year-MSG0010");  	      		
+			}if (/[^a-zA-Z0-9\-\/]/.test(publicationmonth)) {
+				alert("month-MSG0010");  	      		
+			}if (/[^a-zA-Z0-9\-\/]/.test(publicationdate)) {
+				alert("date-MSG0010");  	      		
+			}
+	
+		}
+		function myFunction3(){
+			var id = document.getElementById("bookId").value;	
+			var title = document.getElementById("bookTitle").value;
+			var authorname = document.getElementById("authorName").value;
+			var publisher = document.getElementById("publisher").value;
+			var publicationyear = document.getElementById("publishcationYear").value;
+			var publicationmonth = document.getElementById("publishcationMonth").value;
+			var publicationdate = document.getElementById("publishcationDate").value;
+			if(id == 0){
+				alert("id-MSG0001");
+				if(title == 0){
+					alert("title-MSG0006");	
+				}
+				if(authorname == 0){
+					alert("MSG0007");
+				}
+				if(publisher == 0){
+					alert("MSG0008");
+				}
+				if(publicationyear == 0){
+					alert("year-MSG0009");
+				}
+				if(publicationmonth == 0){
+					alert("month-MSG0009");
+				}
+				if(publicationdate == 0){
+					alert("date-MSG0009");
+				}
+				
+			}else{
+				if (/[^a-zA-Z0-9\-\/]/.test(id)) {
+					alert("MSG0002");  	      		
+				}
+				if(title == 0){
+					alert("title-MSG0006");	
+				}
+				if(authorname == 0){
+					alert("MSG0007");
+				}
+				if(publisher == 0){
+					alert("MSG0008");
+				}
+				if(publicationyear == 0){
+					alert("year-MSG0009");
+				}
+				if(publicationmonth == 0){
+					alert("month-MSG0009");
+				}
+				if(publicationdate == 0){
+					alert("date-MSG0009");
+				}
+				
+			}if (/[^a-zA-Z0-9\-\/]/.test(publicationyear)) {
+				alert("year-MSG0010");  	      		
+			}if (/[^a-zA-Z0-9\-\/]/.test(publicationmonth)) {
+				alert("month-MSG0010");  	      		
+			}if (/[^a-zA-Z0-9\-\/]/.test(publicationdate)) {
+				alert("date-MSG0010");  	      		
+			}
+	
+		}
+		function myFunction4(){	
+			var id = document.getElementById("bookId").value;	
+			if(id == 0){
+				alert("MSG0001");
+			}
+				if (/[^a-zA-Z0-9\-\/]/.test(id)) {
+					alert("MSG0002");  	      		
+			}	
+		}
+		function close_window() {
+			  if (confirm("Close Window?")) {
+			    close();
+			  }
+			}
+	</script>	
+
+</form>
+</body>
+</html>
