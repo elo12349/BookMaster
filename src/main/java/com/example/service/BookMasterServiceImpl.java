@@ -1,9 +1,9 @@
 package com.example.service;
 import java.util.Date;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.model.BookMasterModel;
 import com.example.mapper.BookMasterMapper;
 import com.example.Entity.BookMaster;
@@ -18,15 +18,19 @@ public class BookMasterServiceImpl implements BookMasterService {
 	        this.bookMasterMapper = bookMasterMapper;
 	    }
 	    
+	    @Transactional
 	    @Override
-	    public  Optional<BookMaster> findById(String bookId) {
+	    public BookMaster findById(String bookId) {
 	    	return bookMasterMapper.findById(bookId);
 	    }
 	    
+	    @Transactional
 	    @Override
 	    public void deletebyId(String bookId) {
 	        bookMasterMapper.deletebyId(bookId);
 	    }
+	    
+	    @Transactional
 	    @Override
 	    public void update(BookMasterModel model) {
 	    	BookMaster bookMaster = new BookMaster();
@@ -38,8 +42,8 @@ public class BookMasterServiceImpl implements BookMasterService {
 	    	bookMaster.setInsertDay(new Date());
 	        bookMasterMapper.update(bookMaster);
 	    }
-
 	    
+	@Transactional   
     @Override
     public int insert(BookMasterModel model) {
     	BookMaster bookMaster = new BookMaster();
@@ -51,5 +55,7 @@ public class BookMasterServiceImpl implements BookMasterService {
     	bookMaster.setInsertDay(new Date());
     	return bookMasterMapper.insert(bookMaster);
     }
+
+
 	
 }
