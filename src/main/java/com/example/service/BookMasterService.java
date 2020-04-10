@@ -1,6 +1,6 @@
 package com.example.service;
 import org.springframework.stereotype.Repository;
-import com.example.Entity.BookMaster;
+import com.example.entity.BookMaster;
 import com.example.model.BookMasterModel;
 
 @Repository
@@ -11,7 +11,7 @@ public interface BookMasterService {
 	
 	void update(BookMasterModel model);
 
-	public BookMaster findById(String bookId);
+	BookMaster findById(String bookId);
 
 }
 

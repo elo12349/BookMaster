@@ -1,6 +1,6 @@
 package com.example.web.controller;
 import java.util.Calendar;
-import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.example.Entity.BookMaster;
+import com.example.entity.BookMaster;
 import com.example.model.BookMasterModel;
 import com.example.service.BookMasterService;
 import Form.BookMasterForm;
@@ -41,7 +41,7 @@ public class BookMasterController {
         return "bookmaster";
     }
 
-    @PostMapping(value = "/", params = "btn_search=検索")
+    @PostMapping(value = "/", params = "btn_search")
     public String show(String bookId, RedirectAttributes redirectAttributes,BookMasterModel model) {  
     	BookMaster bookMaster = bookMasterService.findById(bookId);
         if(bookMaster != null) {
@@ -50,15 +50,20 @@ public class BookMasterController {
         	form.setBookTitle(bookMaster.getBookTitle());
         	form.setAuthorName(bookMaster.getAuthorName());
         	form.setPublisher(bookMaster.getPublisher());
+
         	Calendar publicationDay = Calendar.getInstance();
-        	
+            publicationDay.setTime(bookMaster.getPublicationDay());
+            form.setPublicationDate(publicationDay.get(Calendar.DAY_OF_MONTH));
+            form.setPublicationMonth(publicationDay.get(Calendar.MONTH) + 1);
+            form.setPublicationYear(publicationDay.get(Calendar.YEAR));
+
             redirectAttributes.addFlashAttribute("bookMaster", form);
         	
         }
          return "redirect:/";
     }
 
-    @PostMapping(value = "/", params = "btn_insert=add")
+    @PostMapping(value = "/", params = "btn_insert")
     public String add(@ModelAttribute("bookMaster") BookMasterForm bookMasterForm, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("bookMaster", bookMasterForm);
         BookMasterModel model = new BookMasterModel();
@@ -66,29 +71,33 @@ public class BookMasterController {
         model.setBookTitle(bookMasterForm.getBookTitle());
         model.setAuthorName(bookMasterForm.getAuthorName());
         model.setPublisher(bookMasterForm.getPublisher());
+
         Calendar publicationDay = Calendar.getInstance();
-        publicationDay.set(bookMasterForm.getPublicationYear(), bookMasterForm.getPublicationMonth(), bookMasterForm.getPublicationDate());
+        publicationDay.set(bookMasterForm.getPublicationYear(), bookMasterForm.getPublicationMonth() - 1, bookMasterForm.getPublicationDate());
         model.setPublicationDay(publicationDay.getTime());
+
         bookMasterService.insert(model);
         return "redirect:/";
     }
 
-    @PostMapping(value = "/", params = "btn_update=update")
+    @PostMapping(value = "/", params = "btn_update")
     public String update(@ModelAttribute BookMasterForm bookMasterForm, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("bookMaster", bookMasterForm);
         BookMasterModel model = new BookMasterModel();
-        bookMasterForm.setBookId(model.getBookId());
-        bookMasterForm.setBookTitle(model.getBookTitle());
-        bookMasterForm.setAuthorName(model.getAuthorName());
-        bookMasterForm.setPublisher(model.getPublisher());
+        model.setBookId(bookMasterForm.getBookId());
+        model.setBookTitle(bookMasterForm.getBookTitle());
+        model.setAuthorName(bookMasterForm.getAuthorName());
+        model.setPublisher(bookMasterForm.getPublisher());
+
         Calendar publicationDay = Calendar.getInstance();
-        publicationDay.set(bookMasterForm.getPublicationYear(), bookMasterForm.getPublicationMonth(),bookMasterForm.getPublicationDate());
+        publicationDay.set(bookMasterForm.getPublicationYear(), bookMasterForm.getPublicationMonth() - 1,bookMasterForm.getPublicationDate());
         model.setPublicationDay(publicationDay.getTime());
+
         bookMasterService.update(model);
         return "redirect:/";
     }
 
-    @PostMapping(value = "/", params = "btn_delete=delete")
+    @PostMapping(value = "/", params = "btn_delete")
     public String destroy(String bookId)  {
         bookMasterService.deletebyId(bookId);
         return "redirect:/";
