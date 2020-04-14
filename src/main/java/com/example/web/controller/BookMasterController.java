@@ -1,7 +1,5 @@
 package com.example.web.controller;
 import java.util.Calendar;
-import java.util.Locale;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -35,20 +33,18 @@ public class BookMasterController {
     @Autowired
     private BookMasterService bookMasterService;
     MessageSource messagesource;
-    
-    			
+    				
     @GetMapping("/")
     public String index(Model model) {
         if (!model.containsAttribute("bookMaster")) {
-            model.addAttribute("bookMaster", new BookMasterForm());    
+            model.addAttribute("bookMaster", new BookMasterForm());
+
         }
         return "bookmaster";
     }
-   
+    @PostMapping(value = "/", params = "btn_search=検索")
+    public String show(String bookId, RedirectAttributes redirectAttributes,BookMasterModel model) {  
 
-    @PostMapping(value = "/", params = "btn_search")
-    public String show(String bookId, RedirectAttributes redirectAttributes) {
-    	     
     	BookMaster bookMaster = bookMasterService.findById(bookId);
         if(bookMaster != null) {
         	BookMasterForm form = new BookMasterForm();
@@ -57,6 +53,7 @@ public class BookMasterController {
         	form.setAuthorName(bookMaster.getAuthorName());
         	form.setPublisher(bookMaster.getPublisher());
         	Calendar publicationDay = Calendar.getInstance();
+
         	publicationDay.setTime(bookMaster.getPublicationDay());
             form.setPublicationDate(publicationDay.get(Calendar.DAY_OF_MONTH));
             form.setPublicationMonth(publicationDay.get(Calendar.MONTH) + 1);
@@ -69,6 +66,7 @@ public class BookMasterController {
        
          return "redirect:/";
     }
+
 
     @PostMapping(value = "/", params = "btn_insert")
     public String add(@ModelAttribute("bookMaster") BookMasterForm bookMasterForm, RedirectAttributes redirectAttributes) {
@@ -85,6 +83,7 @@ public class BookMasterController {
         return "redirect:/";
     }
 
+
     @PostMapping(value = "/", params = "btn_update")
     public String update(@ModelAttribute BookMasterForm bookMasterForm, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("bookMaster", bookMasterForm);
@@ -99,7 +98,6 @@ public class BookMasterController {
         bookMasterService.update(model);
         return "redirect:/";
     }
-
     @PostMapping(value = "/", params = "btn_delete")
     public String destroy(String bookId)  {
         bookMasterService.deletebyId(bookId);
