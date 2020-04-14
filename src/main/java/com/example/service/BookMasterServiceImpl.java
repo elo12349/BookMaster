@@ -17,19 +17,20 @@ public class BookMasterServiceImpl implements BookMasterService {
 	    public BookMasterServiceImpl(BookMasterMapper bookMasterMapper) {
 	        this.bookMasterMapper = bookMasterMapper;
 	    }
-	    
+ 
 	    @Transactional
 	    @Override
 	    public BookMaster findById(String bookId) {
 	    	return bookMasterMapper.findById(bookId);
 	    }
 	    
+
 	    @Transactional
 	    @Override
 	    public void deletebyId(String bookId) {
 	        bookMasterMapper.deletebyId(bookId);
 	    }
-	    
+
 	    @Transactional
 	    @Override
 	    public void update(BookMasterModel model) {
@@ -42,8 +43,7 @@ public class BookMasterServiceImpl implements BookMasterService {
 	    	bookMaster.setUpdateDay(new Date());
 	        bookMasterMapper.update(bookMaster);
 	    }
-	    
-	@Transactional   
+
     @Override
     public int insert(BookMasterModel model) {
     	BookMaster bookMaster = new BookMaster();
@@ -55,7 +55,4 @@ public class BookMasterServiceImpl implements BookMasterService {
     	bookMaster.setInsertDay(new Date());
     	return bookMasterMapper.insert(bookMaster);
     }
-
-
-	
 }

@@ -48,10 +48,17 @@ input[name=publicationDate]{
 <div  align="right"><a href="javascript:window.open('about:blank','_self').close();">閉じる</a><br/></div>
 <div id="div" >
 		<H4>本マスタメンテ</H4><br> 
+		<div>		
 		<label >本ID:</label><br>
-		<input type="text" id="bookId"   name="bookId" th:field="*{bookId}"  >
+		<input type="text" id="bookId"   name="bookId" th:field="*{bookId}" >
 		
+
+		<input type="submit" id="btn" name="btn_search" value="検索" onclick="myFunction()" th:text="${msg}">&nbsp;&nbsp;<br>
+		
+		</div>
+
 		<input type="submit" id="btn" name="btn_search" value="検索" onclick="myFunction()">&nbsp;&nbsp;<br>
+
 		
 		<label >本タイトル:</label><br>
 		<input type="text" id="bookTitle" name="bookTitle" th:field="*{bookTitle}"  ><br>
@@ -68,9 +75,15 @@ input[name=publicationDate]{
 		<input type="text" id="publishcationDate" name="publicationDay" th:field="*{publicationDate}" >&nbsp;<label>日</label>	<br><br>
 		
 	<div class="btn-group" align="center" >
+
+		<button type="submit" name="btn_insert" value="検索" onclick="myFunction2()">追加</button>&nbsp;&nbsp;
+		<button type="submit" name="btn_update" value="検索" onclick="myFunction3()">変更</button>&nbsp;&nbsp;
+		<button type="submit" name="btn_delete" value="検索" onclick="myFunction4()">削除</button>&nbsp;&nbsp;
+
 		<button type="submit" name="btn_insert" value="add" onclick="myFunction2()">追加</button>&nbsp;&nbsp;
 		<button type="submit" name="btn_update" value="update" onclick="myFunction3()">変更</button>&nbsp;&nbsp;
 		<button type="submit" name="btn_delete" value="delete" onclick="myFunction4()">削除</button>&nbsp;&nbsp;
+
 		<input type="reset" value="クリア">
 	</div>
 	</div>

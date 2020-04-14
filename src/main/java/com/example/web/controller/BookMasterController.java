@@ -1,7 +1,8 @@
 package com.example.web.controller;
-import java.util.Calendar;
 
+import java.util.Calendar;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,17 +33,19 @@ import Form.BookMasterForm;
 public class BookMasterController {
     @Autowired
     private BookMasterService bookMasterService;
+    MessageSource messagesource;
     				
     @GetMapping("/")
     public String index(Model model) {
         if (!model.containsAttribute("bookMaster")) {
             model.addAttribute("bookMaster", new BookMasterForm());
+
         }
         return "bookmaster";
     }
-
     @PostMapping(value = "/", params = "btn_search")
     public String show(String bookId, RedirectAttributes redirectAttributes,BookMasterModel model) {  
+
     	BookMaster bookMaster = bookMasterService.findById(bookId);
         if(bookMaster != null) {
         	BookMasterForm form = new BookMasterForm();
@@ -57,11 +60,16 @@ public class BookMasterController {
             form.setPublicationMonth(publicationDay.get(Calendar.MONTH) + 1);
             form.setPublicationYear(publicationDay.get(Calendar.YEAR));
 
+
             redirectAttributes.addFlashAttribute("bookMaster", form);
-        	
+            redirectAttributes.addFlashAttribute("msg","MSG0003");
+//            messagesource.getMessage("MSG0004",null, Locale.getDefault());
         }
+      
+       
          return "redirect:/";
     }
+
 
     @PostMapping(value = "/", params = "btn_insert")
     public String add(@ModelAttribute("bookMaster") BookMasterForm bookMasterForm, RedirectAttributes redirectAttributes) {
@@ -79,6 +87,7 @@ public class BookMasterController {
         bookMasterService.insert(model);
         return "redirect:/";
     }
+
 
     @PostMapping(value = "/", params = "btn_update")
     public String update(@ModelAttribute BookMasterForm bookMasterForm, RedirectAttributes redirectAttributes) {
