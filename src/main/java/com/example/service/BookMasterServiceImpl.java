@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.model.BookMasterModel;
 import com.example.mapper.BookMasterMapper;
-import com.example.Entity.BookMaster;
+import com.example.entity.BookMaster;
 
 @Service
 public class BookMasterServiceImpl implements BookMasterService {

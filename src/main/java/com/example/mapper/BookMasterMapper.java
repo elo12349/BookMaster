@@ -1,4 +1,5 @@
 package com.example.mapper;
+
 import com.example.Entity.BookMaster;
 import org.apache.ibatis.annotations.*;
 
@@ -17,12 +18,16 @@ public interface BookMasterMapper{
             @Result(property = "publisher", column = "publisher"),
             @Result(property = "publicationDay", column = "publication_day"),
     })
-	BookMaster findById(String bookId);
 
+    BookMaster findById(String bookId);
+
+    @Delete("DELETE FROM public.\"BookMaster\" WHERE book_id = #{bookId}")
+    void deletebyId(String bookId);
+
+    @Update("UPDATE public.\"BookMaster\" SET book_title = #{bookTitle}, author_name = #{authorName}, publisher = #{publisher}, publication_day =#{publicationDay}, update_day =#{updateDay} WHERE book_id = #{bookId}")
+    void update(BookMaster bookMaster);
 	
-	@Delete("DELETE FROM public.\"BookMaster\" WHERE book_id = #{bookId}\"")
-	 void deletebyId(String bookId);
-	
-	@Update("UPDATE public.\"BookMaster\" SET book_title = #{bookTitle}, author_name = #{authorName}, publisher = #{publisher}, publication_day =#{publicationDay} ,insert_day =#{insertDay} ,update_day =#{updateDay} WHERE book_id = #{bookId}")
-    void update(BookMaster bookMaster);	
+	  @Delete("DELETE FROM public.\"BookMaster\" WHERE book_id = #{bookId}\"")
+	  void deletebyId(String bookId);
+
 }
