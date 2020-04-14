@@ -1,6 +1,8 @@
 package com.example.web.controller;
 import java.util.Calendar;
 import java.util.Locale;
+
+import com.example.base.BookSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.bind.BindResult;
 import org.springframework.context.MessageSource;
@@ -100,7 +102,13 @@ public class BookMasterController {
         publicationDay.set(bookMasterForm.getPublicationYear(), bookMasterForm.getPublicationMonth() - 1, bookMasterForm.getPublicationDate());
         model.setPublicationDay(publicationDay.getTime());
 
-        bookMasterService.insert(model);
+        try {
+            bookMasterService.insert(model);
+        } catch (BookSystemException e) {
+            // Controller sẽ xử lý lỗi
+            String messages = messagesource.getMessage(e.getMessage(), null, Locale.getDefault());
+            redirectAttributes.addFlashAttribute("message", messages);
+        }
         return "redirect:/";
     }
 
@@ -118,7 +126,13 @@ public class BookMasterController {
         publicationDay.set(bookMasterForm.getPublicationYear(), bookMasterForm.getPublicationMonth() - 1, bookMasterForm.getPublicationDate());
         model.setPublicationDay(publicationDay.getTime());
 
-        bookMasterService.update(model);
+        try {
+            bookMasterService.update(model);
+        } catch (BookSystemException e) {
+            // Controller sẽ xử lý lỗi
+            String messages = messagesource.getMessage(e.getMessage(), null, Locale.getDefault());
+            redirectAttributes.addFlashAttribute("message", messages);
+        }
         return "redirect:/";
     }
 
