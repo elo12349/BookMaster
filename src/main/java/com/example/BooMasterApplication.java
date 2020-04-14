@@ -7,5 +7,5 @@ public class BooMasterApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BooMasterApplication.class, args);
-	}
+	}	
 }
