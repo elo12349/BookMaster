@@ -47,7 +47,9 @@ input[name=publicationDate]{
 
 <div  align="right"><a href="javascript:window.open('about:blank','_self').close();">閉じる</a><br/></div>
 <div id="div" >
-		<H4>本マスタメンテ</H4><br> 
+		<H4>本マスタメンテ</H4><br>
+		<!--Thêm vào message nè-->
+		<p th:text="${message}"></p>
 		<div>		
 		<label >本ID:</label><br>
 		<input type="text" id="bookId"   name="bookId" th:field="*{bookId}" >
@@ -78,12 +80,13 @@ input[name=publicationDate]{
 		<input type="reset" value="クリア">
 	</div>
 	</div>
-	<script >
-		function myFunction() {	
-			
+	<script th:inline="javascript">
+		function myFunction() {
+
 			var id = document.getElementById("bookId").value;	
 			if(id == 0){
-				alert("MSG0001");
+				// Dùng cấu trức để lấy từ messages.properties lên
+				alert(/*[[#{MSG0001}]]*/;
 				return false;
 			}
 				if (/[^a-zA-Z0-9\-\/]/.test(id)) {
@@ -102,7 +105,8 @@ input[name=publicationDate]{
 			var publicationmonth = document.getElementById("publishcationMonth").value;
 			var publicationdate = document.getElementById("publishcationDate").value;
 			if(id == 0){
-				alert("id-MSG0001");
+				// Dùng cấu trức để lấy từ messages.properties lên
+				alert(/*[[#{id-MSG0001}]]*/;
 				if(title == 0){
 					alert("title-MSG0006");
 						

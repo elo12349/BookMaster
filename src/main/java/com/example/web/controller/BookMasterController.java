@@ -1,49 +1,54 @@
 package com.example.web.controller;
+
 import java.util.Calendar;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.bind.BindResult;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.example.Entity.BookMaster;
+import com.example.entity.BookMaster;
 import com.example.model.BookMasterModel;
 import com.example.service.BookMasterService;
-import Form.BookMasterForm;
+import com.example.web.form.BookMasterForm;
+
+import javax.validation.Valid;
 
 
 /**
- * 
- * ã€�ã‚¯ãƒ©ã‚¹ã�®èª¬æ˜Žã€‘ 
+ * ã€�ã‚¯ãƒ©ã‚¹ã�®èª¬æ˜Žã€‘
  * æœ¬ãƒžã‚¹ã‚¿ã�®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ã‚¯ãƒ©ã‚¹
- * 
+ * <p>
  * ã€�å¤‰æ›´å±¥æ­´ã€‘ 1.00 2018/09/16 æ–°è¦�ä½œæˆ�
- * 
-	 * @author T.Yagi
- * 
- * @version 1.00
  *
+ * @author T.Yagi
+ * @version 1.00
  */
 @Controller
 @RequestMapping("/")
 public class BookMasterController {
     @Autowired
     private BookMasterService bookMasterService;
-    MessageSource messagesource;
-    				
+    @Autowired
+    private MessageSource messagesource;
+
+
     @GetMapping("/")
     public String index(Model model) {
         if (!model.containsAttribute("bookMaster")) {
             model.addAttribute("bookMaster", new BookMasterForm());
-
         }
         return "bookmaster";
     }
+<<<<<<< HEAD
     @PostMapping(value = "/", params = "btn_search=検索")
     public String show(String bookId, RedirectAttributes redirectAttributes) {  
 
@@ -57,10 +62,28 @@ public class BookMasterController {
         	Calendar publicationDay = Calendar.getInstance();
 
         	publicationDay.setTime(bookMaster.getPublicationDay());
+=======
+
+    @PostMapping(value = "/", params = "btn_search")
+    public String show(String bookId, RedirectAttributes redirectAttributes, BookMasterModel model) {
+
+        BookMaster bookMaster = bookMasterService.findById(bookId);
+        if (bookMaster != null) {
+            BookMasterForm form = new BookMasterForm();
+            form.setBookId(bookMaster.getBookId());
+            form.setBookTitle(bookMaster.getBookTitle());
+            form.setAuthorName(bookMaster.getAuthorName());
+            form.setPublisher(bookMaster.getPublisher());
+
+            Calendar publicationDay = Calendar.getInstance();
+            publicationDay.setTime(bookMaster.getPublicationDay());
+>>>>>>> 5f8c9849a0efdfb33f3d520d58bf58456f437ea1
             form.setPublicationDate(publicationDay.get(Calendar.DAY_OF_MONTH));
             form.setPublicationMonth(publicationDay.get(Calendar.MONTH) + 1);
-            form.setPublicationYear(publicationDay.get(Calendar.YEAR));           
+            form.setPublicationYear(publicationDay.get(Calendar.YEAR));
+
             redirectAttributes.addFlashAttribute("bookMaster", form);
+<<<<<<< HEAD
             redirectAttributes.addFlashAttribute("message","MSG0003");
 //            messagesource.getMessage("MSG0004",null, Locale.getDefault());
         } else {
@@ -69,45 +92,65 @@ public class BookMasterController {
             // Lấy về rùi thì phải chuyển lên Model HTML mới lấy đc ha
             // Nhớ sửa HTML nha
             redirectAttributes.addFlashAttribute("message", messages);
+=======
+        } else {
+            //Cái này thì Book mới null nè
+            String message = messagesource.getMessage("MSG0004", null, Locale.getDefault());
+            // Lấy về rùi thì phải chuyển lên Model HTML mới lấy đc ha
+            // Nhớ sửa HTML nha
+            redirectAttributes.addFlashAttribute("message", message);
+>>>>>>> 5f8c9849a0efdfb33f3d520d58bf58456f437ea1
         }
-      
-       
-         return "redirect:/";
+
+
+        return "redirect:/";
     }
 
 
+    // Muốn xài Not NUll thì thêm @Valid để nó kiềm tra, mấy cái lỗi sẽ nằm trong BindResult errors
     @PostMapping(value = "/", params = "btn_insert")
-    public String add(@ModelAttribute("bookMaster") BookMasterForm bookMasterForm, RedirectAttributes redirectAttributes) {
+    public String add(@ModelAttribute("bookMaster") @Valid BookMasterForm bookMasterForm, BindingResult errors, RedirectAttributes redirectAttributes) {
+        if (errors.hasErrors()) {
+            // Có lỗi thì làm gì, tức có ít nhất 1 trường bị null
+            for (FieldError fieldError : errors.getFieldErrors()) {
+                // Field có lồi thì làm gì tự làm nhá
+            }
+        }
         redirectAttributes.addFlashAttribute("bookMaster", bookMasterForm);
         BookMasterModel model = new BookMasterModel();
         model.setBookId(bookMasterForm.getBookId());
         model.setBookTitle(bookMasterForm.getBookTitle());
         model.setAuthorName(bookMasterForm.getAuthorName());
         model.setPublisher(bookMasterForm.getPublisher());
+
         Calendar publicationDay = Calendar.getInstance();
-        publicationDay.set(bookMasterForm.getPublicationYear(), bookMasterForm.getPublicationMonth(), bookMasterForm.getPublicationDate());
+        publicationDay.set(bookMasterForm.getPublicationYear(), bookMasterForm.getPublicationMonth() - 1, bookMasterForm.getPublicationDate());
         model.setPublicationDay(publicationDay.getTime());
+
         bookMasterService.insert(model);
         return "redirect:/";
     }
 
 
     @PostMapping(value = "/", params = "btn_update")
-    public String update(@ModelAttribute BookMasterForm bookMasterForm, RedirectAttributes redirectAttributes) {
+    public String update(@ModelAttribute @Valid BookMasterForm bookMasterForm, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("bookMaster", bookMasterForm);
         BookMasterModel model = new BookMasterModel();
-        bookMasterForm.setBookId(model.getBookId());
-        bookMasterForm.setBookTitle(model.getBookTitle());
-        bookMasterForm.setAuthorName(model.getAuthorName());
-        bookMasterForm.setPublisher(model.getPublisher());
+        model.setBookId(bookMasterForm.getBookId());
+        model.setBookTitle(bookMasterForm.getBookTitle());
+        model.setAuthorName(bookMasterForm.getAuthorName());
+        model.setPublisher(bookMasterForm.getPublisher());
+
         Calendar publicationDay = Calendar.getInstance();
-        publicationDay.set(bookMasterForm.getPublicationYear(), bookMasterForm.getPublicationMonth(),bookMasterForm.getPublicationDate());
+        publicationDay.set(bookMasterForm.getPublicationYear(), bookMasterForm.getPublicationMonth() - 1, bookMasterForm.getPublicationDate());
         model.setPublicationDay(publicationDay.getTime());
+
         bookMasterService.update(model);
         return "redirect:/";
     }
+
     @PostMapping(value = "/", params = "btn_delete")
-    public String destroy(String bookId)  {
+    public String destroy(String bookId) {
         bookMasterService.deletebyId(bookId);
         return "redirect:/";
     }

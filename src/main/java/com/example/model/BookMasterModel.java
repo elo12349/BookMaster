@@ -1,17 +1,12 @@
 package com.example.model;
+
 import java.util.Date;
 
-import javax.validation.constraints.NotNull;
 public class BookMasterModel {
-
     private String bookId;
-	
     private String bookTitle;
-	
     private String authorName;
-	
     private String publisher;
-	
     private Date publicationDay;
 
     public String getBookId() {
