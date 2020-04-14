@@ -1,5 +1,7 @@
 package com.example.web.controller;
 import java.util.Calendar;
+import java.util.Locale;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -43,7 +45,7 @@ public class BookMasterController {
         return "bookmaster";
     }
     @PostMapping(value = "/", params = "btn_search=検索")
-    public String show(String bookId, RedirectAttributes redirectAttributes,BookMasterModel model) {  
+    public String show(String bookId, RedirectAttributes redirectAttributes) {  
 
     	BookMaster bookMaster = bookMasterService.findById(bookId);
         if(bookMaster != null) {
@@ -59,8 +61,14 @@ public class BookMasterController {
             form.setPublicationMonth(publicationDay.get(Calendar.MONTH) + 1);
             form.setPublicationYear(publicationDay.get(Calendar.YEAR));           
             redirectAttributes.addFlashAttribute("bookMaster", form);
-            redirectAttributes.addFlashAttribute("msg","MSG0003");
+            redirectAttributes.addFlashAttribute("message","MSG0003");
 //            messagesource.getMessage("MSG0004",null, Locale.getDefault());
+        } else {
+            //Cái này thì Book mới null nè
+            String messages = messagesource.getMessage("MSG0004", null, Locale.getDefault());
+            // Lấy về rùi thì phải chuyển lên Model HTML mới lấy đc ha
+            // Nhớ sửa HTML nha
+            redirectAttributes.addFlashAttribute("message", messages);
         }
       
        
