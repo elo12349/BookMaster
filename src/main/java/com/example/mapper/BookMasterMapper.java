@@ -1,6 +1,6 @@
 package com.example.mapper;
 
-import com.example.entity.BookMaster;
+import com.example.Entity.BookMaster;
 import org.apache.ibatis.annotations.*;
 
 @Mapper

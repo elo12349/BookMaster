@@ -1,8 +1,6 @@
 package com.example.web.controller;
-
 import java.util.Calendar;
 import java.util.Locale;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.bind.BindResult;
 import org.springframework.context.MessageSource;
@@ -15,7 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.example.entity.BookMaster;
+import com.example.Entity.*;
 import com.example.model.BookMasterModel;
 import com.example.service.BookMasterService;
 import com.example.web.form.BookMasterForm;
@@ -48,21 +46,6 @@ public class BookMasterController {
         }
         return "bookmaster";
     }
-<<<<<<< HEAD
-    @PostMapping(value = "/", params = "btn_search=検索")
-    public String show(String bookId, RedirectAttributes redirectAttributes) {  
-
-    	BookMaster bookMaster = bookMasterService.findById(bookId);
-        if(bookMaster != null) {
-        	BookMasterForm form = new BookMasterForm();
-        	form.setBookId(bookMaster.getBookId());
-        	form.setBookTitle(bookMaster.getBookTitle());
-        	form.setAuthorName(bookMaster.getAuthorName());
-        	form.setPublisher(bookMaster.getPublisher());
-        	Calendar publicationDay = Calendar.getInstance();
-
-        	publicationDay.setTime(bookMaster.getPublicationDay());
-=======
 
     @PostMapping(value = "/", params = "btn_search")
     public String show(String bookId, RedirectAttributes redirectAttributes, BookMasterModel model) {
@@ -77,13 +60,13 @@ public class BookMasterController {
 
             Calendar publicationDay = Calendar.getInstance();
             publicationDay.setTime(bookMaster.getPublicationDay());
->>>>>>> 5f8c9849a0efdfb33f3d520d58bf58456f437ea1
+
             form.setPublicationDate(publicationDay.get(Calendar.DAY_OF_MONTH));
             form.setPublicationMonth(publicationDay.get(Calendar.MONTH) + 1);
             form.setPublicationYear(publicationDay.get(Calendar.YEAR));
 
             redirectAttributes.addFlashAttribute("bookMaster", form);
-<<<<<<< HEAD
+
             redirectAttributes.addFlashAttribute("message","MSG0003");
 //            messagesource.getMessage("MSG0004",null, Locale.getDefault());
         } else {
@@ -92,17 +75,7 @@ public class BookMasterController {
             // Lấy về rùi thì phải chuyển lên Model HTML mới lấy đc ha
             // Nhớ sửa HTML nha
             redirectAttributes.addFlashAttribute("message", messages);
-=======
-        } else {
-            //Cái này thì Book mới null nè
-            String message = messagesource.getMessage("MSG0004", null, Locale.getDefault());
-            // Lấy về rùi thì phải chuyển lên Model HTML mới lấy đc ha
-            // Nhớ sửa HTML nha
-            redirectAttributes.addFlashAttribute("message", message);
->>>>>>> 5f8c9849a0efdfb33f3d520d58bf58456f437ea1
         }
-
-
         return "redirect:/";
     }
 

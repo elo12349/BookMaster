@@ -1,7 +1,7 @@
 package com.example.service;
 
 import org.springframework.stereotype.Repository;
-import com.example.entity.BookMaster;
+import com.example.Entity.BookMaster;
 import com.example.model.BookMasterModel;
 
 @Repository
