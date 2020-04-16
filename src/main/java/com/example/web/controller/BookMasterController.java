@@ -1,13 +1,12 @@
 package com.example.web.controller;
 import java.util.Calendar;
 import java.util.Locale;
+
+import com.example.base.BookSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.bind.BindResult;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,10 +45,9 @@ public class BookMasterController {
         }
         return "bookmaster";
     }
-
     @PostMapping(value = "/", params = "btn_search")
     public String show(String bookId, RedirectAttributes redirectAttributes, BookMasterModel model) {
-
+    	try {
         BookMaster bookMaster = bookMasterService.findById(bookId);
         if (bookMaster != null) {
             BookMasterForm form = new BookMasterForm();
@@ -57,38 +55,26 @@ public class BookMasterController {
             form.setBookTitle(bookMaster.getBookTitle());
             form.setAuthorName(bookMaster.getAuthorName());
             form.setPublisher(bookMaster.getPublisher());
-
             Calendar publicationDay = Calendar.getInstance();
             publicationDay.setTime(bookMaster.getPublicationDay());
-
             form.setPublicationDate(publicationDay.get(Calendar.DAY_OF_MONTH));
             form.setPublicationMonth(publicationDay.get(Calendar.MONTH) + 1);
             form.setPublicationYear(publicationDay.get(Calendar.YEAR));
-
             redirectAttributes.addFlashAttribute("bookMaster", form);
-
-            redirectAttributes.addFlashAttribute("message","MSG0003");
-//            messagesource.getMessage("MSG0004",null, Locale.getDefault());
+            redirectAttributes.addFlashAttribute("message","本が見つかりました。");          
         } else {
-            //Cái này thì Book mới null nè
             String messages = messagesource.getMessage("MSG0004", null, Locale.getDefault());
-            // Lấy về rùi thì phải chuyển lên Model HTML mới lấy đc ha
-            // Nhớ sửa HTML nha
             redirectAttributes.addFlashAttribute("message", messages);
         }
+    	}catch(Exception e) {
+    		String messages = messagesource.getMessage(e.getMessage(),null, Locale.getDefault());
+    		redirectAttributes.addFlashAttribute("message", messages);
+    	}
         return "redirect:/";
-    }
-
-
-    // Muốn xài Not NUll thì thêm @Valid để nó kiềm tra, mấy cái lỗi sẽ nằm trong BindResult errors
+    } 
     @PostMapping(value = "/", params = "btn_insert")
-    public String add(@ModelAttribute("bookMaster") @Valid BookMasterForm bookMasterForm, BindingResult errors, RedirectAttributes redirectAttributes) {
-        if (errors.hasErrors()) {
-            // Có lỗi thì làm gì, tức có ít nhất 1 trường bị null
-            for (FieldError fieldError : errors.getFieldErrors()) {
-                // Field có lồi thì làm gì tự làm nhá
-            }
-        }
+    public String add(@ModelAttribute("bookMaster")  BookMasterForm bookMasterForm, RedirectAttributes redirectAttributes) {
+       
         redirectAttributes.addFlashAttribute("bookMaster", bookMasterForm);
         BookMasterModel model = new BookMasterModel();
         model.setBookId(bookMasterForm.getBookId());
@@ -99,8 +85,22 @@ public class BookMasterController {
         Calendar publicationDay = Calendar.getInstance();
         publicationDay.set(bookMasterForm.getPublicationYear(), bookMasterForm.getPublicationMonth() - 1, bookMasterForm.getPublicationDate());
         model.setPublicationDay(publicationDay.getTime());
-
-        bookMasterService.insert(model);
+        
+        try {
+        	
+        	bookMasterService.insert(model);
+            redirectAttributes.addFlashAttribute("message","本を登録しました。");
+            if(bookMasterForm.getPublicationDate() != 0 ) {
+            	 redirectAttributes.addFlashAttribute("message", "出版年月日が不正です。");
+            }else {
+            	bookMasterService.insert(model);
+                redirectAttributes.addFlashAttribute("message","本を登録しました。");
+            }
+            
+        } catch (BookSystemException e) {      	
+        		String messages = messagesource.getMessage(e.getMessage(), null, Locale.getDefault());
+                redirectAttributes.addFlashAttribute("message", messages);
+        }
         return "redirect:/";
     }
 
@@ -116,15 +116,38 @@ public class BookMasterController {
 
         Calendar publicationDay = Calendar.getInstance();
         publicationDay.set(bookMasterForm.getPublicationYear(), bookMasterForm.getPublicationMonth() - 1, bookMasterForm.getPublicationDate());
+       
         model.setPublicationDay(publicationDay.getTime());
 
-        bookMasterService.update(model);
+        try {
+        	bookMasterService.update(model);
+            redirectAttributes.addFlashAttribute("message","本を更新しました。");
+        	 if(bookMasterForm.getPublicationDate() > 0 || bookMasterForm.getPublicationDate() < 32) {
+             	redirectAttributes.addFlashAttribute("message", "出版年月日が不正です。");
+             }else {
+            	 bookMasterService.update(model);
+                 redirectAttributes.addFlashAttribute("message","本を更新しました。");
+             }
+
+        	
+        } catch (BookSystemException e) {
+        	
+            String messages = messagesource.getMessage(e.getMessage(), null, Locale.getDefault());
+            redirectAttributes.addFlashAttribute("message", messages);
+           
+        }
         return "redirect:/";
     }
 
     @PostMapping(value = "/", params = "btn_delete")
-    public String destroy(String bookId) {
+    public String destroy(String bookId,RedirectAttributes redirectAttributes) {
+    	try {
         bookMasterService.deletebyId(bookId);
+        redirectAttributes.addFlashAttribute("message", "本IDを削除しました。");
+    	}catch(BookSystemException e) {
+    		String messages = messagesource.getMessage(e.getMessage(), null, Locale.getDefault());
+    		redirectAttributes.addFlashAttribute("message", messages);
+    	}
         return "redirect:/";
     }
 }

@@ -2,6 +2,7 @@ package com.example.service;
 
 import java.util.Date;
 
+import com.example.base.BookSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,14 +24,23 @@ public class BookMasterServiceImpl implements BookMasterService {
     @Transactional
     @Override
     public BookMaster findById(String bookId) {
+    	try {
         return bookMasterMapper.findById(bookId);
+    	}catch(Exception e) {
+    		throw new BookSystemException("search.error");
+    	}
     }
 
 
     @Transactional
     @Override
     public void deletebyId(String bookId) {
-        bookMasterMapper.deletebyId(bookId);
+    	try {
+    		 bookMasterMapper.deletebyId(bookId);
+    	}catch(Exception e) {
+    		throw new BookSystemException("delete.error");
+    	}
+       
     }
 
     @Transactional
@@ -43,7 +53,11 @@ public class BookMasterServiceImpl implements BookMasterService {
         bookMaster.setPublisher(model.getPublisher());
         bookMaster.setPublicationDay(model.getPublicationDay());
         bookMaster.setUpdateDay(new Date());
-        bookMasterMapper.update(bookMaster);
+        try {
+            bookMasterMapper.update(bookMaster);
+        } catch (Exception e) {
+            throw new BookSystemException("update.error");
+        }
     }
 
     @Override
@@ -55,6 +69,10 @@ public class BookMasterServiceImpl implements BookMasterService {
         bookMaster.setPublisher(model.getPublisher());
         bookMaster.setPublicationDay(model.getPublicationDay());
         bookMaster.setInsertDay(new Date());
-        return bookMasterMapper.insert(bookMaster);
+        try {
+            return bookMasterMapper.insert(bookMaster);
+        } catch (Exception e) {  
+            throw new BookSystemException("insert.error");
+        }
     }
 }
