@@ -1,0 +1,35 @@
+.background{
+border-style: solid;
+  margin: 20px;
+  padding: 20px;
+  width:20%;
+  height:auto;
+}
+.closed{
+    text-decoration-line: underline;
+	text-decoration-style: solid;
+}
+.btn-group{
+	right:50px;
+}
+input[name=bookId]{
+	width: 100px;
+}
+input[name=bookTitle]{
+	width: 250px;
+}
+input[name=authorName]{
+	width: 250px;
+}
+input[name=publisher]{
+	width: 250px;
+}
+input[name=publicationYear]{
+	width: 80px;
+}
+input[name=publicationMonth]{
+	width: 30px;
+}
+input[name=publicationDate]{
+	width: 30px;
+}
