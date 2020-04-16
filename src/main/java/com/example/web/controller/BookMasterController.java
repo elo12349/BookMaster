@@ -85,6 +85,7 @@ public class BookMasterController {
         Calendar publicationDay = Calendar.getInstance();
         publicationDay.set(bookMasterForm.getPublicationYear(), bookMasterForm.getPublicationMonth() - 1, bookMasterForm.getPublicationDate());
         model.setPublicationDay(publicationDay.getTime());
+
         
         try {
         	
@@ -100,6 +101,7 @@ public class BookMasterController {
         } catch (BookSystemException e) {      	
         		String messages = messagesource.getMessage(e.getMessage(), null, Locale.getDefault());
                 redirectAttributes.addFlashAttribute("message", messages);
+
         }
         return "redirect:/";
     }
@@ -120,6 +122,7 @@ public class BookMasterController {
         model.setPublicationDay(publicationDay.getTime());
 
         try {
+
         	bookMasterService.update(model);
             redirectAttributes.addFlashAttribute("message","本を更新しました。");
         	 if(bookMasterForm.getPublicationDate() > 0 || bookMasterForm.getPublicationDate() < 32) {
@@ -134,7 +137,7 @@ public class BookMasterController {
         	
             String messages = messagesource.getMessage(e.getMessage(), null, Locale.getDefault());
             redirectAttributes.addFlashAttribute("message", messages);
-           
+ 
         }
         return "redirect:/";
     }

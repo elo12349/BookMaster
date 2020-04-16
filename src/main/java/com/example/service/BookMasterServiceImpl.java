@@ -56,6 +56,7 @@ public class BookMasterServiceImpl implements BookMasterService {
         try {
             bookMasterMapper.update(bookMaster);
         } catch (Exception e) {
+
             throw new BookSystemException("update.error");
         }
     }
@@ -71,7 +72,10 @@ public class BookMasterServiceImpl implements BookMasterService {
         bookMaster.setInsertDay(new Date());
         try {
             return bookMasterMapper.insert(bookMaster);
-        } catch (Exception e) {  
+
+        } catch (Exception e) {
+            // Trong service thường ko xử lý lỗi mà sẽ cung cấp thêm ngữ cảnh
+
             throw new BookSystemException("insert.error");
         }
     }
